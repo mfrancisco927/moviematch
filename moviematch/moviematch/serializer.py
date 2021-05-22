@@ -23,3 +23,33 @@ class UserSerializer(serializers.ModelSerializer):
             instance.set_password(password)
         instance.save()
         return instance
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+
+    @classmethod
+    def get_token(cls, user):
+        User.objects.filter(username=user).update(is_active=True)
+        token = super(MyTokenObtainPairSerializer, cls).get_token(user)
+        return token
+
+    def validate(self,attrs):
+       User.objects.filter(username=attrs['username']).update(is_active=True)
+       data = super().validate(attrs)
+       refresh = self.get_token(self.user)
+       data['access'] = str(refresh.access_token)
+       return data
+
+class CustomTokenRefreshSerializer(TokenRefreshSerializer):
+
+    error_msg = 'No known active account with these credentials'
+
+    def validate(self, attrs):
+        token_payload = token_backend.decode(attrs['refresh'])
+        try:
+            user = Profile.objects.get(user=token_payload['user_id'])
+        except:
+            raise exceptions.AuthenticationFailed(
+                self.error_msg, 'no active account'
+            )
+
+        return super().validate(attrs)

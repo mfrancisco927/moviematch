@@ -12,6 +12,7 @@ from rest_framework_simplejwt import authentication
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.models import User
 from .serializer import *
+from .models import *
 
 env = environ.Env()
 environ.Env.read_env()
