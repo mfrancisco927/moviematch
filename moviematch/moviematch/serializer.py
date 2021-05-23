@@ -4,6 +4,7 @@ from rest_framework import exceptions
 from rest_framework_simplejwt.state import token_backend
 from rest_framework_simplejwt.serializers import TokenRefreshSerializer
 from django.contrib.auth.models import User
+from .models import Profile
 
 
 class UserSerializer(serializers.ModelSerializer):

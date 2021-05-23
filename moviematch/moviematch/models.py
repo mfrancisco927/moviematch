@@ -29,3 +29,31 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
+
+class Media(BaseModel):
+    imdbID = models.TextField(primary_key=True)
+    title = models.TextField(max_length=500, blank=False)
+    year = models.TextField(blank=False) #not int because shows have a range, ex Breaking Bad 2008-2013
+    mpaa_rating = models.TextField(max_length=10, blank=False) #G, PG, PG-13, R, NC-17
+    release_date = models.TextField()
+    runtime = models.TextField()
+    genres = models.ManyToManyField("Genre", related_name='media_genre', blank=True)
+    director = models.TextField()
+    writer = models.ManyToManyField("Writer", related_name='media_writer', blank=True)
+    actors = models.ManyToManyField("Actor", related_name='media_actor', blank=True)
+    plot = models.TextField(max_length=500, blank=False)
+    country = models.TextField(max_length=20, blank=False)
+    poster_link = models.TextField(max_length=500, blank=False)
+    imdb_rating = models.FloatField()
+    medium = models.TextField(max_length=20, blank=False)
+
+
+class Actor(BaseModel):
+    name = models.TextField()
+
+class Genre(BaseModel):
+    name = models.TextField()
+
+class Writer(BaseModel):
+    name = models.TextField()
+
