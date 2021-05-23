@@ -14,13 +14,7 @@ class Profile(BaseModel):
     user = models.OneToOneField(User,primary_key=True, on_delete=models.CASCADE)
     friends = models.ManyToManyField("self", related_name='profile_friends', symmetrical=True, blank=True)
     bio = models.TextField(max_length=500, blank=True)
-    '''
-    refresh_token = models.TextField(default="None")
-    liked_songs = models.ManyToManyField(Song, related_name='profile_liked', blank=True)
-    disliked_songs = models.ManyToManyField(Song, related_name='profile_disliked', blank=True)
-    favorite_playlists = models.ManyToManyField("Playlist", related_name='profile_favorite_playlists', blank=True)
-    image = models.ImageField(blank=True, null=True)
-    '''
+
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
